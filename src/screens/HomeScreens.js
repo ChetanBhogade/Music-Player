@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
 import {Divider, Header} from 'react-native-elements';
 import colors from '../assets/colors';
+import AppHeader from '../components/AppHeader';
 import PlayerCard from '../components/PlayerCard';
 import Playing from '../components/Playing';
 
@@ -27,34 +28,26 @@ const DATA = [
 const HomeScreens = () => {
   return (
     <View style={styles.container}>
-      <View>
-        <Header
-          barStyle="default"
-          backgroundColor={colors.dark}
-          leftComponent={{icon: 'menu', color: colors.white}}
-          placement="center"
-          rightComponent={{icon: 'search', color: colors.white}}
-          leftContainerStyle={{paddingLeft: 10}}
-          rightContainerStyle={{paddingRight: 10}}
-        />
-      </View>
+      <AppHeader />
       <ScrollView>
-        <View style={styles.recommendedPlaylistArea}>
-          <Text style={styles.playlistSectionTitle}>Recommended for you</Text>
+        <View style={styles.playlistArea}>
+          <Text style={styles.playlistTitle}>Recommended for you</Text>
           <FlatList
             data={DATA}
             renderItem={PlayerCard}
             keyExtractor={item => item.id}
             horizontal={true}
           />
-          {/* <PlayerCard /> */}
         </View>
-        <Text style={{fontSize: 30, color: colors.white}}>
-          Chetan Subhash Bhogade
-        </Text>
-        <Text style={{fontSize: 30, color: colors.white}}>
-          Inside the ScrollView
-        </Text>
+        <View style={styles.playlistArea}>
+          <Text style={styles.playlistTitle}>Popular playlists</Text>
+          <FlatList
+            data={DATA}
+            renderItem={PlayerCard}
+            keyExtractor={item => item.id}
+            horizontal={true}
+          />
+        </View>
       </ScrollView>
       <Playing
         title="First Song"
@@ -73,13 +66,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.dark,
   },
-  recommendedPlaylistArea: {
-    borderColor: colors.white,
-    borderWidth: 1,
+  playlistArea: {
+    // borderColor: colors.white,
+    // borderWidth: 1,
     paddingLeft: 20,
-    marginTop: 20,
+    marginVertical: 20,
   },
-  playlistSectionTitle: {
+  playlistTitle: {
     color: colors.white,
     fontWeight: 'bold',
     fontSize: 24,

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View, TouchableHighlight} from 'react-native';
 import {Avatar, Card, ListItem, Slider} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../assets/colors';
+import {loaderContext} from '../context/loaderContext';
 
-const Playing = ({ title, subtitle, thumbnail, sliderValue }) => {
+const Playing = ({title, subtitle, thumbnail, sliderValue}) => {
+  const {setLoading} = useContext(loaderContext);
+
   return (
     <>
       <View style={styles.sliderWrapper}>
@@ -27,11 +30,7 @@ const Playing = ({ title, subtitle, thumbnail, sliderValue }) => {
         // ViewComponent={View}
         // topDivider
       >
-        <Avatar
-          source={thumbnail}
-          style={{width: 64, height: 64}}
-          rounded
-        />
+        <Avatar source={thumbnail} style={{width: 64, height: 64}} rounded />
         <ListItem.Content>
           <ListItem.Title>
             <Text style={styles.titleStyle}>{title}</Text>
@@ -55,6 +54,10 @@ const Playing = ({ title, subtitle, thumbnail, sliderValue }) => {
             size={30}
             style={styles.btnStyle}
             color={colors.white}
+            onPress={() => {
+              console.log('Pause Icon pressed');
+              setLoading(true);
+            }}
           />
           <MaterialCommunityIcons
             name="skip-next-outline"
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   sliderThumbStyle: {height: 15, width: 15, backgroundColor: colors.white},
-  titleStyle: {color: colors.white, fontWeight: "bold"},
+  titleStyle: {color: colors.white, fontWeight: 'bold'},
   subtitleStyle: {
     textTransform: 'uppercase',
     color: colors.secondaryText,
