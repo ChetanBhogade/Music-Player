@@ -1,10 +1,12 @@
-import React from 'react';
+import axios from 'axios';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
-import {Divider, Header} from 'react-native-elements';
 import colors from '../assets/colors';
 import AppHeader from '../components/AppHeader';
 import PlayerCard from '../components/PlayerCard';
 import Playing from '../components/Playing';
+import {loaderContext} from '../context/loaderContext';
+import {API_KEY} from '@env';
 
 const DATA = [
   {
@@ -25,13 +27,83 @@ const DATA = [
   },
 ];
 
+const RecommendedPlaylistsId = [
+  'PLO7-VO1D0_6NmK47v6tpOcxurcxdW-hZa',
+  'PL3oW2tjiIxvTSdJ4zqjL9dijeZ0LjcuGS',
+  'PL6CTrxW12Bre4kny-OhqOEQwNjso0VKPc',
+  'PLvFYFNbi-IBFeP5ALr50hoOmKiYRMvzUq',
+];
+
 const HomeScreens = () => {
+  const [recommendedList, setRecommendedList] = useState([]);
+  const {setLoading} = useContext(loaderContext);
+
+  const getDetails = async () => {
+    setLoading(true);
+    let newList = [];
+    try {
+      for (let index = 0; index < RecommendedPlaylistsId.length; index++) {
+        const element = RecommendedPlaylistsId[index];
+
+        const response = await axios.get(
+          'https://www.googleapis.com/youtube/v3/playlists',
+          {
+            params: {
+              key: API_KEY,
+              part: 'snippet,contentDetails,status,id,localizations,player',
+              id: element,
+            },
+          },
+        );
+        console.log(response.data);
+
+        const title = response.data.items[0].snippet.title;
+        const channelId = response.data.items[0].snippet.channelTitle;
+        const thumbnailUrl =
+          response.data.items[0].snippet.thumbnails.medium.url;
+        const id = response.data.items[0].id;
+
+        newList.push({
+          title,
+          channelId,
+          thumbnailUrl,
+          id,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setRecommendedList(newList);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getDetails();
+  }, []);
+
+  const renderItem = ({item}) => (
+    <PlayerCard
+      title={item.title}
+      thumbnailUrl={item.thumbnailUrl}
+      channelId={item.channelId}
+    />
+  );
+
   return (
     <View style={styles.container}>
       <AppHeader />
       <ScrollView>
         <View style={styles.playlistArea}>
           <Text style={styles.playlistTitle}>Recommended for you</Text>
+          <FlatList
+            data={recommendedList}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            horizontal={true}
+          />
+        </View>
+        {/* <View style={styles.playlistArea}>
+          <Text style={styles.playlistTitle}>Recommended for OldOne</Text>
           <FlatList
             data={DATA}
             renderItem={PlayerCard}
@@ -47,7 +119,7 @@ const HomeScreens = () => {
             keyExtractor={item => item.id}
             horizontal={true}
           />
-        </View>
+        </View> */}
       </ScrollView>
       <Playing
         title="First Song"
