@@ -4,12 +4,12 @@ import {Avatar, Card, ListItem, Slider} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../assets/colors';
 
-const Playing = () => {
+const Playing = ({ title, subtitle, thumbnail, sliderValue }) => {
   return (
     <>
       <View style={styles.sliderWrapper}>
         <Slider
-          value={25}
+          value={sliderValue}
           style={{width: '100%', height: 0}}
           thumbStyle={styles.sliderThumbStyle}
           // onValueChange={value => this.setState({value})}
@@ -28,18 +28,16 @@ const Playing = () => {
         // topDivider
       >
         <Avatar
-          source={{
-            uri: 'https://source.unsplash.com/random',
-          }}
+          source={thumbnail}
           style={{width: 64, height: 64}}
           rounded
         />
         <ListItem.Content>
           <ListItem.Title>
-            <Text style={styles.titleStyle}>Chaff & Dust</Text>
+            <Text style={styles.titleStyle}>{title}</Text>
           </ListItem.Title>
           <ListItem.Subtitle>
-            <Text style={styles.subtitleStyle}>Chetan</Text>
+            <Text style={styles.subtitleStyle}>{subtitle}</Text>
           </ListItem.Subtitle>
         </ListItem.Content>
         <View style={styles.playerBtnWrapper}>
@@ -82,7 +80,7 @@ const styles = StyleSheet.create({
   titleStyle: {color: colors.white, fontWeight: "bold"},
   subtitleStyle: {
     textTransform: 'uppercase',
-    color: "#A5C0FF",
+    color: colors.secondaryText,
     fontSize: 12,
   },
   playerBtnWrapper: {
@@ -92,6 +90,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   btnStyle: {
-    marginHorizontal: 5,
+    marginHorizontal: 8,
   },
 });
