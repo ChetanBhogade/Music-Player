@@ -17,6 +17,7 @@ const PlayerCard = ({
         console.log('Card Pressed with id: - ', playlistId);
         navigation.navigate('Playlist', {
           playlistId,
+          playlistTitle: title,
         });
       }}>
       <View

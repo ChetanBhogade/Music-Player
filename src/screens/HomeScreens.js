@@ -6,9 +6,10 @@ import PlayerCard from '../components/PlayerCard';
 import Playing from '../components/Playing';
 import {loaderContext} from '../context/loaderContext';
 import {API_KEY} from '@env';
-import { themeContext } from '../context/themeContext';
+import {themeContext} from '../context/themeContext';
 
 const RecommendedPlaylists = [
+  'PLgzTt0k8mXzEk586ze4BjvDXR7c-TUSnx',
   'PLO7-VO1D0_6NmK47v6tpOcxurcxdW-hZa',
   'PL3oW2tjiIxvTSdJ4zqjL9dijeZ0LjcuGS',
   'PL6CTrxW12Bre4kny-OhqOEQwNjso0VKPc',
@@ -24,8 +25,10 @@ const HindiPlaylist = [
 
 const MarathiPlaylist = [
   'PLClKG3RAWVOte20nJvOHgrirZXZkrO6p_',
-  'PL5LPcPcJ03wKR_d2V7NkrmgtPcWUM1tw0',
-  'PLleyY1Z_tn8eBDPWkVao340S2j_wJKe6-',
+  'PLN_pFG_Bv6D4-gpRS06J2auY87DQaEDuo',
+  'PLGpLqaMxppFp2FUQJnJeUT7FZj1wLcJHA',
+  'PLGpLqaMxppFq6htuAYtoKIlwItU_Gl_Zs',
+  'PLnGgwGS29G0GkGvNRuLyHg0MMbpIJHuu_',
 ];
 
 const HomeScreens = ({navigation}) => {
@@ -105,7 +108,7 @@ const HomeScreens = ({navigation}) => {
       <ScrollView>
         <View style={styles.playlistArea}>
           <Text style={[styles.playlistTitle, {color: colors.foreground}]}>
-            Recommended for you
+            Recommended for you (Global)
           </Text>
           <FlatList
             data={recommendedList}
