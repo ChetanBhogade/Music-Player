@@ -1,23 +1,47 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import colors from '../assets/colors';
+import {themeContext} from '../context/themeContext';
 
-const PlayerCard = ({ thumbnailUrl, title, channelId }) => {
+const PlayerCard = ({
+  thumbnailUrl,
+  title,
+  channelId,
+  playlistId,
+  navigation,
+}) => {
+  const {colors} = useContext(themeContext);
+
   return (
-    <View style={styles.container}>
-      <Image
-        style={{
-          width: '100%',
-          height: 180,
+    <TouchableOpacity
+      onPress={() => {
+        console.log('Card Pressed with id: - ', playlistId);
+        navigation.navigate('Playlist', {
+          playlistId,
+        });
+      }}>
+      <View
+        onPress={() => {
+          console.log('Card Pressed with id: - ', playlistId);
         }}
-        resizeMode="contain"
-        source={{
-          uri: thumbnailUrl
-        }}
-      />
-      <Text style={styles.title}>{title.slice(0, 20)}...</Text>
-      <Text style={styles.subtitle}>{channelId}</Text>
-    </View>
+        style={styles.container}>
+        <Image
+          style={{
+            width: '100%',
+            height: 180,
+          }}
+          resizeMode="contain"
+          source={{
+            uri: thumbnailUrl,
+          }}
+        />
+        <Text style={[styles.title, {color: colors.foreground}]}>
+          {title.slice(0, 20)}...
+        </Text>
+        <Text style={[styles.subtitle, {color: colors.secondaryText}]}>
+          {channelId}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -28,17 +52,15 @@ const styles = StyleSheet.create({
     width: 190,
     height: 242,
     alignItems: 'center',
-    marginHorizontal: 10, 
+    marginHorizontal: 10,
   },
   title: {
     fontSize: 16,
     textAlign: 'center',
     lineHeight: 18.83,
-    color: colors.white,
     marginTop: 10,
   },
   subtitle: {
-    color: colors.secondaryText,
     fontSize: 10,
     marginTop: 5,
   },
