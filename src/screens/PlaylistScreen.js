@@ -21,6 +21,8 @@ const PlaylistScreen = ({route, navigation}) => {
       title={item.title}
       thumbnailUrl={item.thumbnailUrl}
       subtitle={item.subtitle}
+      navigation={navigation}
+      videoId={item.videoId}
     />
   );
 

@@ -27,7 +27,6 @@ const MarathiPlaylist = [
   'PLClKG3RAWVOte20nJvOHgrirZXZkrO6p_',
   'PLN_pFG_Bv6D4-gpRS06J2auY87DQaEDuo',
   'PLGpLqaMxppFp2FUQJnJeUT7FZj1wLcJHA',
-  'PLGpLqaMxppFq6htuAYtoKIlwItU_Gl_Zs',
   'PLnGgwGS29G0GkGvNRuLyHg0MMbpIJHuu_',
 ];
 

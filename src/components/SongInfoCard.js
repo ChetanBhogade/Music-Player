@@ -3,7 +3,7 @@ import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {Avatar, ListItem} from 'react-native-elements';
 import {themeContext} from '../context/themeContext';
 
-const SongInfoCard = ({thumbnailUrl, title, subtitle}) => {
+const SongInfoCard = ({thumbnailUrl, title, subtitle, videoId, navigation}) => {
   return (
     <View>
       <ListItem
@@ -12,7 +12,12 @@ const SongInfoCard = ({thumbnailUrl, title, subtitle}) => {
         style={{marginVertical: 5}}
         disabledStyle={{opacity: 0.5}}
         onLongPress={() => console.log('onLongPress()')}
-        onPress={() => console.log('onPress()')}
+        onPress={() => {
+          console.log('onPress()');
+          navigation.navigate('Player', {
+            videoId,
+          });
+        }}
         pad={20}>
         <Avatar
           source={{
