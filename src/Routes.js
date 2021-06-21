@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreens from './screens/HomeScreens';
 import PlaylistScreen from './screens/PlaylistScreen';
 import PlayerScreen from './screens/PlayerScreen';
+import TestScreen from './screens/TestScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const Routes = () => {
         <Stack.Screen name="Home" component={HomeScreens} />
         <Stack.Screen name="Playlist" component={PlaylistScreen} />
         <Stack.Screen name="Player" component={PlayerScreen} />
+        <Stack.Screen name="TestingPage" component={TestScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

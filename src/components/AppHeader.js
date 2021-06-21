@@ -14,7 +14,7 @@ const AppHeader = () => {
         text: 'Music Player',
         style: {color: colors.foreground, fontSize: 18},
         onPress: () => {
-          console.log('Center Header clicked');
+          console.log('Center Header clicked...');
         },
       }}
       leftComponent={{

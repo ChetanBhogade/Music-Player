@@ -1,6 +1,13 @@
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Text, View, ScrollView, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import AppHeader from '../components/AppHeader';
 import PlayerCard from '../components/PlayerCard';
 import Playing from '../components/Playing';
@@ -105,6 +112,13 @@ const HomeScreens = ({navigation}) => {
     <View style={[styles.container, {backgroundColor: colors.background}]}>
       <AppHeader />
       <ScrollView>
+        <TouchableOpacity
+          style={{padding: 10, margin: 10}}
+          onPress={() => {
+            navigation.navigate('TestingPage');
+          }}>
+          <Text style={{color: colors.foreground, fontSize: 20}}>Chetan</Text>
+        </TouchableOpacity>
         <View style={styles.playlistArea}>
           <Text style={[styles.playlistTitle, {color: colors.foreground}]}>
             Recommended for you (Global)
