@@ -1,10 +1,11 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import HomeScreens from './screens/HomeScreens';
-import PlaylistScreen from './screens/PlaylistScreen';
-import PlayerScreen from './screens/PlayerScreen';
-import TestScreen from './screens/TestScreen';
+import HomeScreens2 from './oldScreens/HomeScreens';
+import PlaylistScreen2 from './oldScreens/PlaylistScreen';
+import PlayerScreen2 from './oldScreens/PlayerScreen';
+import TestScreen2 from './oldScreens/TestScreen';
+import HomeScreen from './screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -12,10 +13,11 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none" initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreens} />
-        <Stack.Screen name="Playlist" component={PlaylistScreen} />
-        <Stack.Screen name="Player" component={PlayerScreen} />
-        <Stack.Screen name="TestingPage" component={TestScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="oldHome" component={HomeScreens2} />
+        <Stack.Screen name="oldPlaylist" component={PlaylistScreen2} />
+        <Stack.Screen name="oldPlayer" component={PlayerScreen2} />
+        <Stack.Screen name="oldTestingPage" component={TestScreen2} />
       </Stack.Navigator>
     </NavigationContainer>
   );
