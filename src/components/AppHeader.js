@@ -4,28 +4,28 @@ import {Header} from 'react-native-elements';
 import {themeContext} from '../context/themeContext';
 
 const AppHeader = () => {
-  const {colors, isDarkTheme, setIsDarkTheme} = useContext(themeContext);
+  // const {colors, isDarkTheme, setIsDarkTheme} = useContext(themeContext);
 
   return (
     <Header
-      barStyle={isDarkTheme ? 'light-content' : 'dark-content'}
-      backgroundColor={colors.background}
+      barStyle='light-content'
+      // backgroundColor={colors.background}
       centerComponent={{
         text: 'Music Player',
-        style: {color: colors.foreground, fontSize: 18},
+        style: {fontSize: 18, color: "#FFF"},
         onPress: () => {
           console.log('Center Header clicked...');
         },
       }}
       leftComponent={{
-        icon: isDarkTheme ? 'brightness-high' : 'brightness-4',
-        color: colors.foreground,
+        icon: 'library-music',
+        color: "#FFF",
         onPress: () => {
-          setIsDarkTheme(!isDarkTheme);
+          console.log("Music Player Icon Clicked...")
         },
       }}
-      placement="center"
-      rightComponent={{icon: 'search', color: colors.foreground}}
+      placement="left"
+      // rightComponent={{icon: 'search', color: colors.foreground}}
       leftContainerStyle={{paddingLeft: 10}}
       rightContainerStyle={{paddingRight: 10}}
     />

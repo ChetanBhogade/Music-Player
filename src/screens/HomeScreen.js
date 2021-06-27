@@ -1,25 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import AppHeader from '../components/AppHeader';
 import {buyCake} from '../myRedux';
 import {FAB} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { themeContext } from '../context/themeContext';
+import PlaylistInfo from '../components/PlaylistInfo';
 
-const HomeScreen = ({noOfCakes, buyCake}) => {
+const HomeScreen = ({noOfCakes, buyCake, navigation}) => {
+  // const {colors, isDarkTheme, setIsDarkTheme} = useContext(themeContext);
+
   return (
     <View style={styles.container}>
       <AppHeader />
       <FAB
         placement="right"
+        color="#1B98F5"
+        size="large"
         icon={
-          <MaterialCommunityIcons name="playlist-plus" size={30} color="#FFF" />
+          <MaterialCommunityIcons name="playlist-plus" size={25} color="#FFF" />
         }
         onPress={() => {
           console.log('Add Playlist Button Clicked...');
+          navigation.navigate("AudioFolder");
         }}
       />
       <View style={styles.mainContent}>
+        <PlaylistInfo />
+        <PlaylistInfo />
         <TouchableOpacity
           onPress={() => {
             console.log('Button Pressed');

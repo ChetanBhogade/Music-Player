@@ -6,6 +6,7 @@ import PlaylistScreen2 from './oldScreens/PlaylistScreen';
 import PlayerScreen2 from './oldScreens/PlayerScreen';
 import TestScreen2 from './oldScreens/TestScreen';
 import HomeScreen from './screens/HomeScreen';
+import AudioFolder from './screens/AudioFolder';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const Routes = () => {
     <NavigationContainer>
       <Stack.Navigator headerMode="none" initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="AudioFolder" component={AudioFolder} />
         <Stack.Screen name="oldHome" component={HomeScreens2} />
         <Stack.Screen name="oldPlaylist" component={PlaylistScreen2} />
         <Stack.Screen name="oldPlayer" component={PlayerScreen2} />
