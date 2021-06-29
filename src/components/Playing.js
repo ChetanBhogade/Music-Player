@@ -2,12 +2,10 @@ import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Avatar, ListItem, Slider} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {themeContext} from '../context/themeContext';
 import {loaderContext} from '../context/loaderContext';
 
-const Playing = ({title, subtitle, thumbnail, sliderValue}) => {
+const Playing = ({title, subtitle, sliderValue}) => {
   const {setLoading} = useContext(loaderContext);
-  const {colors} = useContext(themeContext);
 
   return (
     <>
@@ -15,18 +13,14 @@ const Playing = ({title, subtitle, thumbnail, sliderValue}) => {
         <Slider
           value={sliderValue}
           style={{width: '100%', height: 0}}
-          thumbStyle={[
-            styles.sliderThumbStyle,
-            {backgroundColor: colors.foreground},
-          ]}
+          thumbStyle={styles.sliderThumbStyle}
           // onValueChange={value => this.setState({value})}
-          minimumTrackTintColor={colors.foreground}
           maximumValue={100}
         />
       </View>
       <ListItem
         Component={View}
-        containerStyle={{backgroundColor: colors.background}}
+        containerStyle={{backgroundColor: "#dfe6e9"}}
         disabledStyle={{opacity: 0.5}}
         pad={20}
         // onLongPress={() => console.log('onLongPress()')}
@@ -34,24 +28,26 @@ const Playing = ({title, subtitle, thumbnail, sliderValue}) => {
         // ViewComponent={View}
         // topDivider
       >
-        <Avatar source={thumbnail} style={{width: 64, height: 64}} rounded />
+        <Avatar
+          icon={{name: 'music-note'}}
+          size="large"
+          overlayContainerStyle={{backgroundColor: '#ff7675'}}
+          style={{width: 64, height: 64}}
+          rounded
+        />
         <ListItem.Content>
           <ListItem.Title>
-            <Text style={[styles.titleStyle, {color: colors.foreground}]}>
-              {title}
-            </Text>
+            <Text style={styles.titleStyle}>{title}</Text>
           </ListItem.Title>
           <ListItem.Subtitle>
-            <Text style={[styles.subtitleStyle, {color: colors.secondaryText}]}>
-              {subtitle}
-            </Text>
+            <Text style={styles.subtitleStyle}>{subtitle}</Text>
           </ListItem.Subtitle>
         </ListItem.Content>
         <View style={styles.playerBtnWrapper}>
           <MaterialCommunityIcons
             name="skip-previous-outline"
             size={30}
-            color={colors.foreground}
+            // color={colors.foreground}
             style={styles.btnStyle}
             onPress={() => {
               console.log('Icon pressed');
@@ -61,7 +57,7 @@ const Playing = ({title, subtitle, thumbnail, sliderValue}) => {
             name="pause"
             size={30}
             style={styles.btnStyle}
-            color={colors.foreground}
+            // color={colors.foreground}
             onPress={() => {
               console.log('Pause Icon pressed');
               setLoading(true);
@@ -71,7 +67,7 @@ const Playing = ({title, subtitle, thumbnail, sliderValue}) => {
             name="skip-next-outline"
             size={30}
             style={styles.btnStyle}
-            color={colors.foreground}
+            // color={colors.foreground}
           />
         </View>
       </ListItem>
@@ -87,11 +83,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 1,
   },
-  sliderThumbStyle: {height: 15, width: 15},
+  sliderThumbStyle: {
+    height: 15,
+    width: 15,
+    backgroundColor: '#120E43',
+  },
   titleStyle: {fontWeight: 'bold'},
   subtitleStyle: {
     textTransform: 'uppercase',
-    fontSize: 12,
+    fontSize: 14,
   },
   playerBtnWrapper: {
     flexDirection: 'row',

@@ -7,6 +7,7 @@ import SongInfo from '../components/SongInfo';
 import DocumentPicker from 'react-native-document-picker';
 import {addPlaylistSong} from '../myRedux';
 import uuid from 'react-native-uuid';
+import Playing from '../components/Playing';
 
 const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
   const {name, id} = route.params;
@@ -77,6 +78,14 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
             pickMultipleFiles();
           }}
           title="Add Your Songs"
+        />
+      </View>
+      <Divider orientation="horizontal" style={{marginVertical: 10}} />
+      <View>
+        <Playing
+          title="Chetan Bhogade"
+          sliderValue={35}
+          subtitle="01:20 - 04:30"
         />
       </View>
     </View>

@@ -5,6 +5,7 @@ import AppHeader from '../components/AppHeader';
 import {FAB} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlaylistInfo from '../components/PlaylistInfo';
+import Playing from '../components/Playing';
 
 const HomeScreen = ({navigation, playlist}) => {
   const renderPlaylistFolders = ({item}) => {
@@ -27,19 +28,31 @@ const HomeScreen = ({navigation, playlist}) => {
           renderItem={renderPlaylistFolders}
           keyExtractor={item => item.id}
         />
+        <FAB
+          placement="right"
+          color="#1B98F5"
+          size="large"
+          icon={
+            <MaterialCommunityIcons
+              name="playlist-plus"
+              size={25}
+              color="#FFF"
+            />
+          }
+          onPress={() => {
+            console.log('Add Playlist Button Clicked...');
+            navigation.navigate('AudioFolder');
+          }}
+        />
       </View>
-      <FAB
-        placement="right"
-        color="#1B98F5"
-        size="large"
-        icon={
-          <MaterialCommunityIcons name="playlist-plus" size={25} color="#FFF" />
-        }
-        onPress={() => {
-          console.log('Add Playlist Button Clicked...');
-          navigation.navigate('AudioFolder');
-        }}
-      />
+
+      <View>
+        <Playing
+          title="Chetan Bhogade"
+          sliderValue={35}
+          subtitle="01:20 - 04:30"
+        />
+      </View>
     </View>
   );
 };
