@@ -1,17 +1,12 @@
-import {ADD_PLAYLIST} from './playlistType';
+import {ADD_PLAYLIST, REMOVE_PLAYLIST} from './playlistType';
+import uuid from 'react-native-uuid';
 
 const initialState = {
   playlist: [
     {
-      id: 1,
-      name: 'Hindi Songs',
-      audioFiles: [
-        {
-          id: 1,
-          name: 'Kal Ho Na Ho',
-          path: '/emulated/0/download/kal-ho-na-ho.mp3',
-        },
-      ],
+      id: uuid.v4(),
+      name: 'Favorite Songs',
+      audioFiles: [],
       timestamp: new Date().getTime(),
     },
   ],
@@ -23,6 +18,12 @@ const playlistReducer = (state = initialState, action) => {
       return {
         ...state,
         playlist: [...state.playlist, action.payload],
+      };
+
+    case REMOVE_PLAYLIST:
+      return {
+        ...state,
+        playlist: state.playlist.filter(list => list.id !== action.payload),
       };
 
     default:

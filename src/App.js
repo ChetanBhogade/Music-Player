@@ -6,19 +6,24 @@ import {loaderContext} from './context/loaderContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import {ThemeProvider} from './context/themeContext';
 import {Provider} from 'react-redux';
-import store from './myRedux/store';
+import reduxStore from './myRedux/store';
+import {PersistGate} from 'redux-persist/integration/react';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
 
+  const { store, persistor } = reduxStore();
+
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-        <loaderContext.Provider value={{loading, setLoading}}>
-          <ThemeProvider>
-            <Routes />
-          </ThemeProvider>
-        </loaderContext.Provider>
+        <PersistGate loading={null} persistor={persistor}>
+          <loaderContext.Provider value={{loading, setLoading}}>
+            <ThemeProvider>
+              <Routes />
+            </ThemeProvider>
+          </loaderContext.Provider>
+        </PersistGate>
       </Provider>
       <LoadingSpinner loading={loading} />
     </SafeAreaProvider>

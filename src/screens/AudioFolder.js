@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, FlatList, ToastAndroid} from 'react-native';
 import AppHeader from '../components/AppHeader';
 import {Divider, Button, Overlay, Input} from 'react-native-elements';
 import FolderInfo from '../components/FolderInfo';
 import {width} from '../constant/ScreenDimensions';
 import {connect} from 'react-redux';
-import {addPlaylist} from '../myRedux';
+import {addPlaylist, removePlaylist} from '../myRedux';
 import uuid from 'react-native-uuid';
 
-const AudioFolder = ({navigation, playlist, addPlaylist}) => {
+const AudioFolder = ({navigation, playlist, addPlaylist, removePlaylist}) => {
   const [visible, setVisible] = useState(false);
   const [playlistName, setPlaylistName] = useState('');
 
@@ -18,8 +18,28 @@ const AudioFolder = ({navigation, playlist, addPlaylist}) => {
 
   const renderPlaylistFolders = ({item}) => {
     return (
-      <FolderInfo name={item.name} noOfAudioFiles={item.audioFiles.length} />
+      <FolderInfo
+        name={item.name}
+        noOfAudioFiles={item.audioFiles?.length}
+        removePlaylist={removePlaylist}
+        id={item.id}
+      />
     );
+  };
+
+  const createPlaylist = () => {
+    if (!playlistName) {
+      ToastAndroid.show('Please provide playlist name', ToastAndroid.LONG);
+      return;
+    }
+    addPlaylist({
+      id: uuid.v4(),
+      name: playlistName,
+      audioFiles: [],
+      timestamp: new Date().getTime(),
+    });
+    setVisible(false);
+    setPlaylistName('');
   };
 
   return (
@@ -43,8 +63,20 @@ const AudioFolder = ({navigation, playlist, addPlaylist}) => {
           title="Add New Playlist"
         />
         <View style={styles.actionBtnWrapper}>
-          <Button buttonStyle={styles.actionBtn} title="Cancel" />
-          <Button buttonStyle={styles.actionBtn} title="OK" />
+          <Button
+            buttonStyle={styles.actionBtn}
+            onPress={() => {
+              navigation.goBack();
+            }}
+            title="Cancel"
+          />
+          <Button
+            buttonStyle={styles.actionBtn}
+            onPress={() => {
+              navigation.goBack();
+            }}
+            title="OK"
+          />
         </View>
       </View>
 
@@ -56,19 +88,14 @@ const AudioFolder = ({navigation, playlist, addPlaylist}) => {
             leftIcon={{type: 'font-awesome', name: 'plus-square-o'}}
             style={styles.inputStyle}
             onChangeText={value => setPlaylistName(value)}
+            value={playlistName}
+            autoFocus={true}
           />
           <Button
             title="Add Playlist"
             type="outline"
             onPress={() => {
-              console.log('Playlist Name: - ', playlistName);
-              addPlaylist({
-                id: uuid.v4(),
-                name: playlistName,
-                audioFiles: [],
-                timestamp: new Date().getTime(),
-              });
-              setVisible(false)
+              createPlaylist();
             }}
           />
         </View>
@@ -86,6 +113,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addPlaylist: data => dispatch(addPlaylist(data)),
+    removePlaylist: id => dispatch(removePlaylist(id)),
   };
 };
 

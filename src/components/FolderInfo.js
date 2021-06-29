@@ -4,17 +4,22 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {StyleSheet, Text, View} from 'react-native';
 import propTypes from 'prop-types';
 
-
-const FolderInfo = ({ name, noOfAudioFiles }) => {
+const FolderInfo = ({name, noOfAudioFiles, removePlaylist, id}) => {
   return (
     <ListItem
       bottomDivider
       onPress={() => {
         console.log('Folder Clicked...');
       }}>
-      <MaterialCommunityIcons onPress={() => {
-        console.log("Deleted Icon Pressed...")
-      }} name="delete-circle" size={45} color="#FF6263" />
+      <MaterialCommunityIcons
+        onPress={() => {
+          console.log('Deleted Icon Pressed with id: - ', id);
+          removePlaylist(id);
+        }}
+        name="delete-circle"
+        size={45}
+        color="#FF6263"
+      />
       <ListItem.Content>
         <ListItem.Title>{name}</ListItem.Title>
         <ListItem.Subtitle>Audio Files: {noOfAudioFiles}</ListItem.Subtitle>
@@ -27,8 +32,8 @@ const FolderInfo = ({ name, noOfAudioFiles }) => {
 export default FolderInfo;
 
 FolderInfo.propTypes = {
-  name: propTypes.string.isRequired, 
-  noOfAudioFiles: propTypes.number.isRequired
-}
+  name: propTypes.string.isRequired,
+  noOfAudioFiles: propTypes.number.isRequired,
+};
 
 const styles = StyleSheet.create({});
