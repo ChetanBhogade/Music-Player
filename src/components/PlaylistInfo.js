@@ -4,13 +4,22 @@ import {ListItem} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import propTypes from 'prop-types';
 
-const PlaylistInfo = ({name, noOfAudioFiles}) => {
+const PlaylistInfo = ({name, navigation, audioFilesInfo, id}) => {
   return (
-    <ListItem bottomDivider>
+    <ListItem
+      bottomDivider
+      onPress={() => {
+        console.log('Playlist Clicked...');
+        navigation.navigate('Playlist', {
+          name,
+          audioFilesInfo, 
+          id
+        });
+      }}>
       <MaterialCommunityIcons name="folder-music" size={45} color="#758283" />
       <ListItem.Content>
         <ListItem.Title>{name}</ListItem.Title>
-        <ListItem.Subtitle>Audio Files: {noOfAudioFiles}</ListItem.Subtitle>
+        <ListItem.Subtitle>Audio Files: {audioFilesInfo.length}</ListItem.Subtitle>
       </ListItem.Content>
     </ListItem>
   );
@@ -18,7 +27,7 @@ const PlaylistInfo = ({name, noOfAudioFiles}) => {
 
 PlaylistInfo.propTypes = {
   name: propTypes.string.isRequired,
-  noOfAudioFiles: propTypes.number.isRequired,
+  audioFilesInfo: propTypes.array.isRequired,
 };
 
 export default PlaylistInfo;

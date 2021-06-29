@@ -2,18 +2,19 @@ import React, {useContext} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import AppHeader from '../components/AppHeader';
-import {buyCake} from '../myRedux';
 import {FAB} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {themeContext} from '../context/themeContext';
 import PlaylistInfo from '../components/PlaylistInfo';
 
-const HomeScreen = ({noOfCakes, buyCake, navigation, playlist}) => {
-  // const {colors, isDarkTheme, setIsDarkTheme} = useContext(themeContext);
-
+const HomeScreen = ({navigation, playlist}) => {
   const renderPlaylistFolders = ({item}) => {
     return (
-      <PlaylistInfo name={item.name} noOfAudioFiles={item.audioFiles?.length} />
+      <PlaylistInfo
+        name={item.name}
+        navigation={navigation}
+        audioFilesInfo={item.audioFilesInfo}
+        id={item.id}
+      />
     );
   };
 
@@ -26,24 +27,6 @@ const HomeScreen = ({noOfCakes, buyCake, navigation, playlist}) => {
           renderItem={renderPlaylistFolders}
           keyExtractor={item => item.id}
         />
-        {/* <TouchableOpacity
-          onPress={() => {
-            console.log('Button Pressed');
-          }}
-          style={{padding: 10, borderRadius: 10, backgroundColor: '#8D3DAF'}}>
-          <Text style={{fontSize: 20, color: '#FFF'}}>
-            Start Your App From Here
-          </Text>
-        </TouchableOpacity>
-        <Text style={{fontSize: 30}}>No of cakes: - {noOfCakes} </Text>
-        <TouchableOpacity
-          onPress={() => {
-            console.log('Buy Cake');
-            buyCake();
-          }}
-          style={{padding: 10, borderRadius: 10, backgroundColor: '#383CC1'}}>
-          <Text style={{fontSize: 20, color: '#FFF'}}>Buy Cake</Text>
-        </TouchableOpacity> */}
       </View>
       <FAB
         placement="right"
@@ -63,15 +46,12 @@ const HomeScreen = ({noOfCakes, buyCake, navigation, playlist}) => {
 
 const mapStateToProps = state => {
   return {
-    noOfCakes: state.cakeReducer.noOfCakes,
     playlist: state.playlistReducer.playlist,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    buyCake: () => dispatch(buyCake()),
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

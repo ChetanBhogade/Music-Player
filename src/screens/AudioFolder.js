@@ -20,7 +20,7 @@ const AudioFolder = ({navigation, playlist, addPlaylist, removePlaylist}) => {
     return (
       <FolderInfo
         name={item.name}
-        noOfAudioFiles={item.audioFiles?.length}
+        noOfAudioFiles={item.audioFilesInfo?.length}
         removePlaylist={removePlaylist}
         id={item.id}
       />
@@ -35,7 +35,7 @@ const AudioFolder = ({navigation, playlist, addPlaylist, removePlaylist}) => {
     addPlaylist({
       id: uuid.v4(),
       name: playlistName,
-      audioFiles: [],
+      audioFilesInfo: [],
       timestamp: new Date().getTime(),
     });
     setVisible(false);

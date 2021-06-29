@@ -1,2 +1,1 @@
-export {buyCake} from './cake/cakeActions';
-export {addPlaylist, removePlaylist} from './playlist/playlistActions';
+export {addPlaylist, removePlaylist, addPlaylistSong} from './playlist/playlistActions';
