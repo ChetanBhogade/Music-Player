@@ -12,8 +12,8 @@ const PlaylistInfo = ({name, navigation, audioFilesInfo, id}) => {
         console.log('Playlist Clicked...');
         navigation.navigate('Playlist', {
           name,
-          audioFilesInfo, 
-          id
+          id, 
+          isEdit: false,
         });
       }}>
       <MaterialCommunityIcons name="folder-music" size={45} color="#758283" />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import {connect} from 'react-redux';
@@ -8,9 +8,12 @@ import DocumentPicker from 'react-native-document-picker';
 import {addPlaylistSong} from '../myRedux';
 import uuid from 'react-native-uuid';
 import Playing from '../components/Playing';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
-  const {name, id} = route.params;
+  const {name, id, isEdit} = route.params;
+
+  const [loading, setLoading] = useState(false);
 
   const audioFilesList = playlist => {
     let audioList;
@@ -29,6 +32,7 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
 
   const pickMultipleFiles = async () => {
     console.log('Pick Multiple files from storage....');
+    setLoading(true);
     try {
       const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.audio],
@@ -57,6 +61,7 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
         throw err;
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -70,24 +75,35 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
           renderItem={renderSongInfo}
           keyExtractor={item => item.id}
         />
+
+        {loading ? (
+          <Text style={{fontSize: 16, textAlign: 'center'}}>
+            Grabbing your audio files, please wait...
+          </Text>
+        ) : null}
       </View>
-      <Divider orientation="horizontal" style={{marginVertical: 10}} />
-      <View style={styles.bottomActionWrapper}>
-        <Button
-          onPress={() => {
-            pickMultipleFiles();
-          }}
-          title="Add Your Songs"
-        />
-      </View>
-      <Divider orientation="horizontal" style={{marginVertical: 10}} />
-      <View>
-        <Playing
-          title="Chetan Bhogade"
-          sliderValue={35}
-          subtitle="01:20 - 04:30"
-        />
-      </View>
+      {isEdit ? (
+        <>
+          <Divider orientation="horizontal" style={{marginVertical: 10}} />
+          <View style={styles.bottomActionWrapper}>
+            <Button
+              onPress={() => {
+                pickMultipleFiles();
+              }}
+              title="Add Your Songs"
+            />
+          </View>
+        </>
+      ) : (
+        <View>
+          <Playing
+            title="Chetan Bhogade"
+            sliderValue={35}
+            subtitle="01:20 - 04:30"
+          />
+        </View>
+      )}
+      <LoadingSpinner loading={loading} />
     </View>
   );
 };

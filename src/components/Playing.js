@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import {Avatar, ListItem, Slider} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {loaderContext} from '../context/loaderContext';
@@ -20,7 +20,7 @@ const Playing = ({title, subtitle, sliderValue}) => {
       </View>
       <ListItem
         Component={View}
-        containerStyle={{backgroundColor: "#dfe6e9"}}
+        containerStyle={{backgroundColor: '#dfe6e9'}}
         disabledStyle={{opacity: 0.5}}
         pad={20}
         // onLongPress={() => console.log('onLongPress()')}
@@ -29,10 +29,12 @@ const Playing = ({title, subtitle, sliderValue}) => {
         // topDivider
       >
         <Avatar
-          icon={{name: 'music-note'}}
+          // source={require('../assets/gifs/music.gif')}
+          icon={{ name: "music-note", type: "material-community", size: 45 }}
           size="large"
-          overlayContainerStyle={{backgroundColor: '#ff7675'}}
-          style={{width: 64, height: 64}}
+          overlayContainerStyle={{backgroundColor: '#000'}}
+          style={{width: 55, height: 55 }}
+          // iconStyle={{ width: 90 }}
           rounded
         />
         <ListItem.Content>

@@ -16,7 +16,9 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate
+          loading={<LoadingSpinner loading={true} />}
+          persistor={persistor}>
           <loaderContext.Provider value={{loading, setLoading}}>
             <Routes />
           </loaderContext.Provider>

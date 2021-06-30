@@ -4,12 +4,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {StyleSheet, Text, View} from 'react-native';
 import propTypes from 'prop-types';
 
-const FolderInfo = ({name, noOfAudioFiles, removePlaylist, id}) => {
+const FolderInfo = ({name, noOfAudioFiles, removePlaylist, id, navigation}) => {
   return (
     <ListItem
       bottomDivider
       onPress={() => {
-        console.log('Folder Clicked...');
+        console.log('Edit Folder Clicked...');
+        navigation.navigate('Playlist', {
+          name,
+          id, 
+          isEdit: true,
+        })
       }}>
       <MaterialCommunityIcons
         onPress={() => {

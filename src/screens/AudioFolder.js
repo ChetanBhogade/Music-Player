@@ -23,6 +23,7 @@ const AudioFolder = ({navigation, playlist, addPlaylist, removePlaylist}) => {
         noOfAudioFiles={item.audioFilesInfo?.length}
         removePlaylist={removePlaylist}
         id={item.id}
+        navigation={navigation}
       />
     );
   };
