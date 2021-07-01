@@ -4,19 +4,19 @@ import {ListItem} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import propTypes from 'prop-types';
 
-const SongInfo = ({name}) => {
+const SongInfo = ({name, playSong}) => {
   return (
     <ListItem
       bottomDivider
       onPress={() => {
         console.log('Song Clicked...');
+        playSong();
       }}>
       <MaterialCommunityIcons
-        onPress={() => {
-          console.log('Deleted Icon Pressed with id: - ', id);
-          removePlaylist(id);
-        }}
-        name="music" // "play-circle-outline"
+        // onPress={() => {
+        //   console.log("Song Music Icon Pressed...");
+        // }}
+        name="music-circle-outline" // "play-circle-outline"
         size={40}
         color="#FF6263"
       />

@@ -9,13 +9,13 @@ const initialState = {
       audioFilesInfo: [
         {
           id: uuid.v4(),
-          name: 'Kal Ho Na Ho',
-          path: '/emulator/0/download/kal-ho-na-ho.mp3',
+          title: 'Kal Ho Na Ho',
+          url: '/emulator/0/download/kal-ho-na-ho.mp3',
         },
         {
           id: uuid.v4(),
-          name: 'Kal Ho Na Ho 2',
-          path: '/emulator/0/download/kal-ho-na-ho-2.mp3',
+          title: 'Kal Ho Na Ho 2',
+          url: '/emulator/0/download/kal-ho-na-ho-2.mp3',
         },
       ],
       timestamp: new Date().getTime(),

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {Button, Divider} from 'react-native-elements';
 import {connect} from 'react-redux';
@@ -9,6 +9,7 @@ import {addPlaylistSong} from '../myRedux';
 import uuid from 'react-native-uuid';
 import Playing from '../components/Playing';
 import LoadingSpinner from '../components/LoadingSpinner';
+import TrackPlayer from 'react-native-track-player';
 
 const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
   const {name, id, isEdit} = route.params;
@@ -26,8 +27,23 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
     return audioList;
   };
 
+  const createTrack = async () => {
+    await TrackPlayer.add(audioFilesList(playlist));
+    console.log('Track has been created successfully...');
+  };
+
+  const playClickedSong = async () => {
+    await createTrack();
+    console.log('Starting to play song...');
+    await TrackPlayer.play();
+  };
+
+  // useEffect(() => {
+  //   createTrack();
+  // }, []);
+
   const renderSongInfo = ({item}) => {
-    return <SongInfo name={item.name} />;
+    return <SongInfo name={item.title} playSong={playClickedSong} />;
   };
 
   const pickMultipleFiles = async () => {
@@ -46,8 +62,8 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
         );
         const newSongDetails = {
           id: uuid.v4(),
-          name: res.name,
-          path: res.uri,
+          title: res.name,
+          url: res.uri,
           type: res.type,
           size: res.size,
         };

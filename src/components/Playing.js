@@ -3,9 +3,12 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import {Avatar, ListItem, Slider} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {loaderContext} from '../context/loaderContext';
+import TrackPlayer, {useTrackPlayerProgress} from 'react-native-track-player';
 
 const Playing = ({title, subtitle, sliderValue}) => {
   const {setLoading} = useContext(loaderContext);
+
+  const {position, bufferedPosition, duration} = useTrackPlayerProgress();
 
   return (
     <>
@@ -30,10 +33,10 @@ const Playing = ({title, subtitle, sliderValue}) => {
       >
         <Avatar
           // source={require('../assets/gifs/music.gif')}
-          icon={{ name: "music-note", type: "material-community", size: 45 }}
+          icon={{name: 'music-note', type: 'material-community', size: 45}}
           size="large"
           overlayContainerStyle={{backgroundColor: '#000'}}
-          style={{width: 55, height: 55 }}
+          style={{width: 55, height: 55}}
           // iconStyle={{ width: 90 }}
           rounded
         />
@@ -42,7 +45,9 @@ const Playing = ({title, subtitle, sliderValue}) => {
             <Text style={styles.titleStyle}>{title}</Text>
           </ListItem.Title>
           <ListItem.Subtitle>
-            <Text style={styles.subtitleStyle}>{subtitle}</Text>
+            <Text style={styles.subtitleStyle}>
+              {subtitle} | {position} : {duration} | {bufferedPosition}
+            </Text>
           </ListItem.Subtitle>
         </ListItem.Content>
         <View style={styles.playerBtnWrapper}>
@@ -51,8 +56,9 @@ const Playing = ({title, subtitle, sliderValue}) => {
             size={30}
             // color={colors.foreground}
             style={styles.btnStyle}
-            onPress={() => {
-              console.log('Icon pressed');
+            onPress={async () => {
+              console.log('Previous Song Play Icon Pressed...');
+              await TrackPlayer.skipToPrevious();
             }}
           />
           <MaterialCommunityIcons
@@ -60,9 +66,9 @@ const Playing = ({title, subtitle, sliderValue}) => {
             size={30}
             style={styles.btnStyle}
             // color={colors.foreground}
-            onPress={() => {
-              console.log('Pause Icon pressed');
-              setLoading(true);
+            onPress={async () => {
+              console.log('Pause Icon Pressed...');
+              await TrackPlayer.pause();
             }}
           />
           <MaterialCommunityIcons
@@ -70,6 +76,10 @@ const Playing = ({title, subtitle, sliderValue}) => {
             size={30}
             style={styles.btnStyle}
             // color={colors.foreground}
+            onPress={async () => {
+              console.log('Next Song Play Icon Pressed...');
+              await TrackPlayer.skipToNext();
+            }}
           />
         </View>
       </ListItem>
