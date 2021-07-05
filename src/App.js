@@ -11,11 +11,35 @@ import TrackPlayer, {
   useTrackPlayerEvents,
   TrackPlayerEvents,
 } from 'react-native-track-player';
+import { PermissionsAndroid } from 'react-native';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
 
   const {store, persistor} = reduxStore();
+
+  const requestForPermission = async () => {
+    try {
+      const writeStorage =
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+      const readStorage = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+      const granted = await PermissionsAndroid.requestMultiple([
+        writeStorage,
+        readStorage,
+      ]);
+      console.log('Granted: - ', granted[writeStorage], readStorage);
+      if (granted[writeStorage] === 'granted') {
+        //alert('You can use the location');
+        console.log('write granted');
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
 
   const trackPlayerInit = async () => {
     console.log('Setting up the track player...');
@@ -61,6 +85,8 @@ const App = () => {
         TrackPlayer.CAPABILITY_STOP,
       ],
     });
+
+    requestForPermission();
   }, []);
 
   return (

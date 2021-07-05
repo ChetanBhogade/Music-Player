@@ -43,6 +43,11 @@ const AudioFolder = ({navigation, playlist, addPlaylist, removePlaylist}) => {
     setPlaylistName('');
   };
 
+  const chooseYourFolder = () => {
+    console.log('Initializing Choose Folder Page...');
+    navigation.navigate("ChooseFolder");
+  };
+
   return (
     <View style={styles.root}>
       <AppHeader />
@@ -59,7 +64,8 @@ const AudioFolder = ({navigation, playlist, addPlaylist, removePlaylist}) => {
       <View style={styles.bottomActionWrapper}>
         <Button
           onPress={() => {
-            setVisible(true);
+            // setVisible(true);
+            chooseYourFolder();
           }}
           title="Add New Playlist"
         />
