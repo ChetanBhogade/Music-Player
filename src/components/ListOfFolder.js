@@ -3,12 +3,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const ListOfFolder = ({name}) => {
+const ListOfFolder = ({name, item, onSelect}) => {
   return (
     <ListItem
       bottomDivider
       onPress={() => {
         console.log('Choose Folder Clicked...');
+        onSelect(item);
         // navigation.navigate('Playlist', {
         //   name,
         //   id,

@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  PermissionsAndroid,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {Divider, Button} from 'react-native-elements';
 import AppHeader from '../components/AppHeader';
 import ListOfFolder from '../components/ListOfFolder';
@@ -13,6 +7,8 @@ import RNFS from 'react-native-fs';
 
 const ChooseFolder = () => {
   const [currentFolderList, setCurrentFolderList] = useState([]);
+  const [latestFolderPath, setLatestFolderPath] = useState('');
+
 
   const renderRootFolder = async () => {
     console.log('Rendering root folder....');
@@ -25,28 +21,72 @@ const ChooseFolder = () => {
 
         for (let index = 0; index < result.length; index++) {
           const statDetails = await RNFS.stat(result[index].path);
-          if (statDetails.path === '/storage/emulated') {
+          const folderPath = statDetails.path;
+          const folderName = folderPath.substring(
+            folderPath.lastIndexOf('/') + 1,
+            folderPath.length,
+          );
+          if (folderPath === '/storage/emulated') {
             validFolders.push({
               ...statDetails,
-              path: `${statDetails.path}/0`,
+              folderName: `${folderName}/0`,
+              path: `${folderPath}/0`,
             });
           } else {
-            validFolders.push(statDetails);
+            if (folderPath !== '/storage/self') {
+              validFolders.push({...statDetails, folderName: folderName});
+            }
           }
         }
-        console.log('ValidFolders: - ', validFolders);
         setCurrentFolderList(validFolders);
-        return validFolders;
+        setLatestFolderPath("/storage")
       })
       .catch(err => {
         console.log('Error: - ', err.message, err.code);
       });
   };
 
+  const getSelectedFolderList = item => {
+    console.log('Getting selected folder list....');
+    RNFS.readDir(item.path)
+      .then(async result => {
+        console.log('Got the result: - ', result);
+        let newFoldersList = [];
+        for (let index = 0; index < result.length; index++) {
+          const element = result[index];
+          const folderName = element.path.substring(
+            element.path.lastIndexOf('/') + 1,
+            element.path.length,
+          );
+          await RNFS.stat(element.path)
+            .then(fileStat => {
+              console.log('File Stat isDirectory: - ', fileStat.isDirectory());
+              if (fileStat.isDirectory()) {
+                // console.log('FileInfo: - ', fileStat);
+                newFoldersList.push({
+                  ...fileStat,
+                  folderName: folderName,
+                });
+              }
+            })
+            .catch(error => {
+              console.log('Got an Error: - ', error);
+            });
+        }
+        setCurrentFolderList(newFoldersList);
+        setLatestFolderPath(item.path);
+      })
+      .catch(error => {
+        console.log('Got an error: - ', error.message, error.code);
+      });
+  };
+
   const renderChooseFoldersList = ({item}) => {
     return (
       <ListOfFolder
-        name={item.path}
+        name={item.folderName}
+        item={item}
+        onSelect={getSelectedFolderList}
       />
     );
   };
@@ -59,9 +99,12 @@ const ChooseFolder = () => {
     <View style={styles.root}>
       <AppHeader />
       <View style={styles.container}>
-        <Text style={styles.headerStyle}>Modify your playlists</Text>
+        <Text style={styles.headerStyle}>Choose Your Folder</Text>
         <Divider orientation="horizontal" style={{marginVertical: 10}} />
-        <ListOfFolder name="Chetan" />
+        <Text style={styles.breadcrumb}>
+          Location: -{' '}
+          <Text style={styles.breadcrumbText}>{latestFolderPath}</Text>
+        </Text>
         <FlatList
           data={currentFolderList}
           renderItem={renderChooseFoldersList}
@@ -98,5 +141,15 @@ const styles = StyleSheet.create({
   },
   bottomActionWrapper: {
     margin: 8,
+  },
+  breadcrumb: {
+    fontSize: 14,
+    marginHorizontal: 10,
+    marginBottom: 10,
+    color: '#758283',
+  },
+  breadcrumbText: {
+    fontSize: 16,
+    color: '#242B2E',
   },
 });
