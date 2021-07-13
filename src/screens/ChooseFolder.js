@@ -1,19 +1,74 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  BackHandler,
+  ToastAndroid,
+} from 'react-native';
 import {Divider, Button} from 'react-native-elements';
 import AppHeader from '../components/AppHeader';
 import ListOfFolder from '../components/ListOfFolder';
 import RNFS from 'react-native-fs';
+import LoadingSpinner from '../components/LoadingSpinner';
+import Toast from '../components/Toast';
 
-const ChooseFolder = () => {
+const ChooseFolder = ({navigation}) => {
   const [currentFolderList, setCurrentFolderList] = useState([]);
-  const [latestFolderPath, setLatestFolderPath] = useState('');
+  const [latestFolderPath, setLatestFolderPath] = useState('/storage');
+  const [loading, setLoading] = useState(false);
+  const [visibleToast, setVisibleToast] = useState(false);
 
+  const handleSelectFolder = () => {
+    console.log('I like this folder.');
+  };
+
+  useEffect(() => setVisibleToast(false), [visibleToast]);
+
+  const verifyPath = path => {
+    if (path === '/storage/emulated') {
+      setLatestFolderPath('/storage/emulated/0');
+    } else if (path === '/storage/self') {
+      console.log('Path You are not allowed to access this folder');
+      setVisibleToast(true);
+      setLatestFolderPath('/storage');
+    } else if (path === '/' || path === '') {
+      navigation.goBack();
+    }
+  };
+
+  const handleBackPress = () => {
+    const folderStack = latestFolderPath.split('/');
+    console.log('Hardware Back button pressed: - ');
+    folderStack.pop();
+    const newPath = folderStack.join('/');
+
+    if (newPath === '/storage/emulated') {
+      setLatestFolderPath('/storage');
+    } else {
+      setLatestFolderPath(newPath);
+    }
+
+    return true;
+  };
+
+  useEffect(() => {
+    getSelectedFolderList(latestFolderPath);
+  }, [latestFolderPath]);
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    };
+  });
 
   const renderRootFolder = async () => {
     console.log('Rendering root folder....');
 
-    RNFS.readDir('/storage/')
+    RNFS.readDir(latestFolderPath)
       .then(async result => {
         console.log('Got Result: - ', result);
 
@@ -26,29 +81,21 @@ const ChooseFolder = () => {
             folderPath.lastIndexOf('/') + 1,
             folderPath.length,
           );
-          if (folderPath === '/storage/emulated') {
-            validFolders.push({
-              ...statDetails,
-              folderName: `${folderName}/0`,
-              path: `${folderPath}/0`,
-            });
-          } else {
-            if (folderPath !== '/storage/self') {
-              validFolders.push({...statDetails, folderName: folderName});
-            }
-          }
+          validFolders.push({...statDetails, folderName: folderName});
         }
         setCurrentFolderList(validFolders);
-        setLatestFolderPath("/storage")
+        // setLatestFolderPath('/storage');
       })
       .catch(err => {
         console.log('Error: - ', err.message, err.code);
       });
   };
 
-  const getSelectedFolderList = item => {
+  const getSelectedFolderList = path => {
     console.log('Getting selected folder list....');
-    RNFS.readDir(item.path)
+    setLoading(true);
+    verifyPath(path);
+    RNFS.readDir(path)
       .then(async result => {
         console.log('Got the result: - ', result);
         let newFoldersList = [];
@@ -74,10 +121,12 @@ const ChooseFolder = () => {
             });
         }
         setCurrentFolderList(newFoldersList);
-        setLatestFolderPath(item.path);
+        setLatestFolderPath(path);
+        setLoading(false);
       })
       .catch(error => {
         console.log('Got an error: - ', error.message, error.code);
+        setLoading(false);
       });
   };
 
@@ -115,11 +164,16 @@ const ChooseFolder = () => {
       <View style={styles.bottomActionWrapper}>
         <Button
           onPress={() => {
-            console.log('I like this folder.');
+            handleSelectFolder();
           }}
           title="Select This Folder"
         />
       </View>
+      <LoadingSpinner loading={loading} />
+      <Toast
+        visible={visibleToast}
+        message="Path You are not allowed to access this folder"
+      />
     </View>
   );
 };

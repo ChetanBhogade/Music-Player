@@ -9,7 +9,7 @@ const ListOfFolder = ({name, item, onSelect}) => {
       bottomDivider
       onPress={() => {
         console.log('Choose Folder Clicked...');
-        onSelect(item);
+        onSelect(item.path);
         // navigation.navigate('Playlist', {
         //   name,
         //   id,
