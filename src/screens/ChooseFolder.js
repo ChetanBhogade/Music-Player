@@ -1,27 +1,82 @@
 import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  BackHandler,
-  ToastAndroid,
-} from 'react-native';
+import {FlatList, StyleSheet, Text, View, BackHandler} from 'react-native';
 import {Divider, Button} from 'react-native-elements';
 import AppHeader from '../components/AppHeader';
 import ListOfFolder from '../components/ListOfFolder';
 import RNFS from 'react-native-fs';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Toast from '../components/Toast';
+import {connect} from 'react-redux';
+import uuid from 'react-native-uuid';
+import {addPlaylist} from '../myRedux';
 
-const ChooseFolder = ({navigation}) => {
+const ChooseFolder = ({navigation, addPlaylist}) => {
   const [currentFolderList, setCurrentFolderList] = useState([]);
   const [latestFolderPath, setLatestFolderPath] = useState('/storage');
   const [loading, setLoading] = useState(false);
   const [visibleToast, setVisibleToast] = useState(false);
 
-  const handleSelectFolder = () => {
+  const handleSelectFolder = async () => {
     console.log('I like this folder.');
+    const playlistName = latestFolderPath.split('/').pop();
+    console.log('Selected Folder Name is: - ', playlistName);
+    const audioList = await grabAudioFiles(latestFolderPath);
+    console.log("Folder's Audio Files: - ", audioList, audioList.length);
+
+    addPlaylist({
+      id: uuid.v4(),
+      name: playlistName,
+      audioFilesInfo: await audioList.map(item => {
+        return {
+          id: uuid.v4(),
+          title: item.fileName,
+          url: item.originalFilepath,
+          size: item.size,
+        };
+      }),
+      timestamp: new Date().getTime(),
+    });
+    navigation.goBack();
+  };
+
+  const grabAudioFiles = path => {
+    setLoading(true);
+    return RNFS.readDir(path)
+      .then(async result => {
+        console.log('Got the result: - ', result);
+        let newAudioFileList = [];
+        for (let index = 0; index < result.length; index++) {
+          const element = result[index];
+          const fileName = element.path.substring(
+            element.path.lastIndexOf('/') + 1,
+            element.path.length,
+          );
+          await RNFS.stat(element.path)
+            .then(fileStat => {
+              console.log('File Stat isFile: - ', fileStat.isFile());
+              if (
+                fileStat.isFile() &&
+                (fileName.split('.').pop() === 'mp3' ||
+                  fileName.split('.').pop() === 'MP3')
+              ) {
+                console.log('FileInfo: - ', fileStat);
+                newAudioFileList.push({
+                  ...fileStat,
+                  fileName,
+                });
+              }
+            })
+            .catch(error => {
+              console.log('Got an Error: - ', error);
+            });
+        }
+        setLoading(false);
+        return newAudioFileList;
+      })
+      .catch(error => {
+        console.log('Got an error: - ', error.message, error.code);
+        setLoading(false);
+      });
   };
 
   useEffect(() => setVisibleToast(false), [visibleToast]);
@@ -178,7 +233,12 @@ const ChooseFolder = ({navigation}) => {
   );
 };
 
-export default ChooseFolder;
+const mapDispatchToProps = dispatch => {
+  return {
+    addPlaylist: data => dispatch(addPlaylist(data)),
+  };
+};
+export default connect(null, mapDispatchToProps)(ChooseFolder);
 
 const styles = StyleSheet.create({
   root: {
