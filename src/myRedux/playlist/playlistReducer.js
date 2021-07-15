@@ -1,4 +1,9 @@
-import {ADD_PLAYLIST, ADD_PLAYLIST_SONG, REMOVE_PLAYLIST} from './playlistType';
+import {
+  ADD_PLAYLIST,
+  ADD_PLAYLIST_SONG,
+  PLAYER_STATE,
+  REMOVE_PLAYLIST,
+} from './playlistType';
 import uuid from 'react-native-uuid';
 
 const initialState = {
@@ -21,6 +26,7 @@ const initialState = {
       timestamp: new Date().getTime(),
     },
   ],
+  currentPlayerState: null,
 };
 
 const addAudioFilesInformation = (state, action) => {
@@ -55,6 +61,12 @@ const playlistReducer = (state = initialState, action) => {
 
     case ADD_PLAYLIST_SONG:
       return addAudioFilesInformation(state, action);
+
+    case PLAYER_STATE:
+      return {
+        ...state,
+        currentPlayerState: action.payload,
+      };
 
     default:
       return state;

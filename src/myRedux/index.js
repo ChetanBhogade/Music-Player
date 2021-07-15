@@ -1,1 +1,6 @@
-export {addPlaylist, removePlaylist, addPlaylistSong} from './playlist/playlistActions';
+export {
+  addPlaylist,
+  removePlaylist,
+  addPlaylistSong,
+  setPlayerState,
+} from './playlist/playlistActions';

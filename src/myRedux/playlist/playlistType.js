@@ -1,3 +1,4 @@
 export const ADD_PLAYLIST = 'ADD_PLAYLIST';
 export const REMOVE_PLAYLIST = 'REMOVE_PLAYLIST';
 export const ADD_PLAYLIST_SONG = 'ADD_PLAYLIST_SONG';
+export const PLAYER_STATE = 'PLAYER_STATE';

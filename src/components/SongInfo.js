@@ -4,13 +4,13 @@ import {ListItem} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import propTypes from 'prop-types';
 
-const SongInfo = ({name, playSong}) => {
+const SongInfo = ({name, playSong, index}) => {
   return (
     <ListItem
       bottomDivider
       onPress={() => {
         console.log('Song Clicked...');
-        playSong();
+        playSong(index);
       }}>
       <MaterialCommunityIcons
         // onPress={() => {
@@ -22,7 +22,6 @@ const SongInfo = ({name, playSong}) => {
       />
       <ListItem.Content>
         <ListItem.Title>{name}</ListItem.Title>
-        {/* <ListItem.Subtitle>Audio Files: 1</ListItem.Subtitle> */}
       </ListItem.Content>
     </ListItem>
   );

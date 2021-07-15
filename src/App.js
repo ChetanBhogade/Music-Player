@@ -7,11 +7,22 @@ import LoadingSpinner from './components/LoadingSpinner';
 import {Provider} from 'react-redux';
 import reduxStore from './myRedux/store';
 import {PersistGate} from 'redux-persist/integration/react';
-import TrackPlayer, {
-  useTrackPlayerEvents,
-  TrackPlayerEvents,
-} from 'react-native-track-player';
-import { PermissionsAndroid } from 'react-native';
+import TrackPlayer from 'react-native-track-player';
+import {PermissionsAndroid} from 'react-native';
+
+TrackPlayer.updateOptions({
+  stopWithApp: false,
+  capabilities: [
+    TrackPlayer.CAPABILITY_PLAY,
+    TrackPlayer.CAPABILITY_PAUSE,
+    TrackPlayer.CAPABILITY_STOP,
+  ],
+  compactCapabilities: [
+    TrackPlayer.CAPABILITY_PLAY,
+    TrackPlayer.CAPABILITY_PAUSE,
+    TrackPlayer.CAPABILITY_STOP,
+  ],
+});
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -49,44 +60,13 @@ const App = () => {
     return true;
   };
 
-  useTrackPlayerEvents([TrackPlayerEvents.REMOTE_STOP], async event => {
-    if (event.type === TrackPlayerEvents.REMOTE_STOP) {
-      console.log('We are stopping the player...');
-      TrackPlayer.destroy();
-    }
-  });
 
   useEffect(() => {
-    trackPlayerInit();
-    TrackPlayer.updateOptions({
-      alwaysPauseOnInterruption: true,
-      capabilities: [
-        TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_SEEK_TO,
-        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-        TrackPlayer.CAPABILITY_STOP,
-      ],
-      compactCapabilities: [
-        TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_SEEK_TO,
-        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-        TrackPlayer.CAPABILITY_STOP,
-      ],
-      notificationCapabilities: [
-        TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_SEEK_TO,
-        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-        TrackPlayer.CAPABILITY_STOP,
-      ],
-    });
+    // trackPlayerInit();
 
     requestForPermission();
+
+    return () => TrackPlayer.destroy();
   }, []);
 
   return (

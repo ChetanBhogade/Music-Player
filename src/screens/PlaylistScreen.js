@@ -28,22 +28,22 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
   };
 
   const createTrack = async () => {
+    await TrackPlayer.reset();
     await TrackPlayer.add(audioFilesList(playlist));
+    await TrackPlayer.play();
     console.log('Track has been created successfully...');
   };
 
-  const playClickedSong = async () => {
+  const playClickedSong = async (trackIndex) => {
     await createTrack();
-    console.log('Starting to play song...');
-    await TrackPlayer.play();
+    console.log('Starting to play song...', await TrackPlayer.getCurrentTrack());
+    // await TrackPlayer.skip(`${index}`);
+    await TrackPlayer.skip(trackIndex);
+    
   };
 
-  // useEffect(() => {
-  //   createTrack();
-  // }, []);
-
   const renderSongInfo = ({item}) => {
-    return <SongInfo name={item.title} playSong={playClickedSong} />;
+    return <SongInfo name={item.title} playSong={playClickedSong} index={item.id} />;
   };
 
   const pickMultipleFiles = async () => {
