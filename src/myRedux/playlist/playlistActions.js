@@ -3,6 +3,7 @@ import {
   ADD_PLAYLIST_SONG,
   PLAYER_STATE,
   REMOVE_PLAYLIST,
+  SET_PLAYER_INFO,
 } from './playlistType';
 
 export const addPlaylist = playlistData => {
@@ -30,5 +31,12 @@ export const setPlayerState = state => {
   return {
     type: PLAYER_STATE,
     payload: state,
+  };
+};
+
+export const setPlayerInfo = info => {
+  return {
+    type: SET_PLAYER_INFO,
+    payload: info,
   };
 };

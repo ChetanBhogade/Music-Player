@@ -1,10 +1,6 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import HomeScreens2 from './oldScreens/HomeScreens';
-import PlaylistScreen2 from './oldScreens/PlaylistScreen';
-import PlayerScreen2 from './oldScreens/PlayerScreen';
-import TestScreen2 from './oldScreens/TestScreen';
 import HomeScreen from './screens/HomeScreen';
 import AudioFolder from './screens/AudioFolder';
 import PlaylistScreen from './screens/PlaylistScreen';
@@ -15,9 +11,28 @@ import TrackPlayer, {
   STATE_PLAYING,
   STATE_PAUSED,
   STATE_STOPPED,
+  useTrackPlayerProgress,
 } from 'react-native-track-player';
 import {connect} from 'react-redux';
-import {setPlayerState} from './myRedux';
+import {setPlayerInfo, setPlayerState} from './myRedux';
+
+const secondsToMS = value => {
+  const sec = parseInt(value, 10); // convert value to number if it's string
+  let hours = Math.floor(sec / 3600); // get hours
+  let minutes = Math.floor((sec - hours * 3600) / 60); // get minutes
+  let seconds = sec - hours * 3600 - minutes * 60; //  get seconds
+  // add 0 if value < 10; Example: 2 => 02
+  if (hours < 10) {
+    hours = '0' + hours;
+  }
+  if (minutes < 10) {
+    minutes = '0' + minutes;
+  }
+  if (seconds < 10) {
+    seconds = '0' + seconds;
+  }
+  return minutes + ':' + seconds; // Return is MM : SS
+};
 
 const Stack = createStackNavigator();
 
@@ -27,7 +42,25 @@ const events = [
   TrackPlayerEvents.REMOTE_STOP,
 ];
 
-const Routes = ({setPlayerState}) => {
+const Routes = ({setPlayerState, setPlayerInfo}) => {
+  const {position, bufferedPosition, duration} = useTrackPlayerProgress();
+
+  const grabCurrentTrackInfo = async () => {
+    const trackIndex = await TrackPlayer.getCurrentTrack();
+    const trackObject = await TrackPlayer.getTrack(trackIndex);
+
+    setPlayerInfo({
+      duration: secondsToMS(duration),
+      position: secondsToMS(position),
+      sliderPercentage: parseInt((position / duration) * 100),
+      trackTitle: trackObject ? trackObject.title : "No Media",
+    });
+  }
+
+  useEffect(() => {
+    grabCurrentTrackInfo();
+  }, [position]);
+
   const setUpTrackPlayer = async () => {
     try {
       await TrackPlayer.setupPlayer();
@@ -73,10 +106,6 @@ const Routes = ({setPlayerState}) => {
         <Stack.Screen name="AudioFolder" component={AudioFolder} />
         <Stack.Screen name="Playlist" component={PlaylistScreen} />
         <Stack.Screen name="ChooseFolder" component={ChooseFolder} />
-        <Stack.Screen name="oldHome" component={HomeScreens2} />
-        <Stack.Screen name="oldPlaylist" component={PlaylistScreen2} />
-        <Stack.Screen name="oldPlayer" component={PlayerScreen2} />
-        <Stack.Screen name="oldTestingPage" component={TestScreen2} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -85,6 +114,7 @@ const Routes = ({setPlayerState}) => {
 const mapDispatchToProps = dispatch => {
   return {
     setPlayerState: data => dispatch(setPlayerState(data)),
+    setPlayerInfo: data => dispatch(setPlayerInfo(data)),
   };
 };
 

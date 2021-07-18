@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {Avatar, ListItem} from 'react-native-elements';
-import {themeContext} from '../context/themeContext';
 
 const SongInfoCard = ({thumbnailUrl, title, subtitle, videoId, navigation}) => {
   return (

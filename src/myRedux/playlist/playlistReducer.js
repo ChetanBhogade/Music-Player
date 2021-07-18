@@ -3,6 +3,7 @@ import {
   ADD_PLAYLIST_SONG,
   PLAYER_STATE,
   REMOVE_PLAYLIST,
+  SET_PLAYER_INFO,
 } from './playlistType';
 import uuid from 'react-native-uuid';
 
@@ -27,6 +28,13 @@ const initialState = {
     },
   ],
   currentPlayerState: null,
+  playerInfo: {
+    duration: 'mm:ss',
+    position: 'mm:ss',
+    sliderPercentage: (45 / 100) * 100,
+    trackTitle: 'getTrack(getCurrentTrack()) use this function as it is',
+  },
+  sliderPercentage: (45 / 100) * 100,
 };
 
 const addAudioFilesInformation = (state, action) => {
@@ -66,6 +74,12 @@ const playlistReducer = (state = initialState, action) => {
       return {
         ...state,
         currentPlayerState: action.payload,
+      };
+
+    case SET_PLAYER_INFO:
+      return {
+        ...state,
+        playerInfo: action.payload,
       };
 
     default:

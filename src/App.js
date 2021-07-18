@@ -2,7 +2,6 @@ import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Routes from './Routes';
-import {loaderContext} from './context/loaderContext';
 import LoadingSpinner from './components/LoadingSpinner';
 import {Provider} from 'react-redux';
 import reduxStore from './myRedux/store';
@@ -10,23 +9,9 @@ import {PersistGate} from 'redux-persist/integration/react';
 import TrackPlayer from 'react-native-track-player';
 import {PermissionsAndroid} from 'react-native';
 
-TrackPlayer.updateOptions({
-  stopWithApp: false,
-  capabilities: [
-    TrackPlayer.CAPABILITY_PLAY,
-    TrackPlayer.CAPABILITY_PAUSE,
-    TrackPlayer.CAPABILITY_STOP,
-  ],
-  compactCapabilities: [
-    TrackPlayer.CAPABILITY_PLAY,
-    TrackPlayer.CAPABILITY_PAUSE,
-    TrackPlayer.CAPABILITY_STOP,
-  ],
-});
+console.log('Track Player Options has been updated.');
 
 const App = () => {
-  const [loading, setLoading] = useState(false);
-
   const {store, persistor} = reduxStore();
 
   const requestForPermission = async () => {
@@ -60,11 +45,24 @@ const App = () => {
     return true;
   };
 
-
   useEffect(() => {
     // trackPlayerInit();
 
     requestForPermission();
+
+    TrackPlayer.updateOptions({
+      stopWithApp: false,
+      capabilities: [
+        TrackPlayer.CAPABILITY_PLAY,
+        TrackPlayer.CAPABILITY_PAUSE,
+        TrackPlayer.CAPABILITY_STOP,
+      ],
+      compactCapabilities: [
+        TrackPlayer.CAPABILITY_PLAY,
+        TrackPlayer.CAPABILITY_PAUSE,
+        TrackPlayer.CAPABILITY_STOP,
+      ],
+    });
 
     return () => TrackPlayer.destroy();
   }, []);
@@ -75,12 +73,9 @@ const App = () => {
         <PersistGate
           loading={<LoadingSpinner loading={true} />}
           persistor={persistor}>
-          <loaderContext.Provider value={{loading, setLoading}}>
-            <Routes />
-          </loaderContext.Provider>
+          <Routes />
         </PersistGate>
       </Provider>
-      <LoadingSpinner loading={loading} />
     </SafeAreaProvider>
   );
 };
