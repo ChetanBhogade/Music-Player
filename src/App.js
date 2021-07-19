@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Routes from './Routes';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -35,17 +35,7 @@ const App = () => {
     }
   };
 
-  const trackPlayerInit = async () => {
-    console.log('Setting up the track player...');
-    await TrackPlayer.setupPlayer({
-      maxCacheSize: 1048576,
-    });
-    return true;
-  };
-
   useEffect(() => {
-    // trackPlayerInit();
-
     requestForPermission();
 
     TrackPlayer.updateOptions({
@@ -54,11 +44,15 @@ const App = () => {
         TrackPlayer.CAPABILITY_PLAY,
         TrackPlayer.CAPABILITY_PAUSE,
         TrackPlayer.CAPABILITY_STOP,
+        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
+        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
       ],
       compactCapabilities: [
         TrackPlayer.CAPABILITY_PLAY,
         TrackPlayer.CAPABILITY_PAUSE,
         TrackPlayer.CAPABILITY_STOP,
+        TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
+        TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
       ],
     });
     console.log('Track Player Options has been updated.');
