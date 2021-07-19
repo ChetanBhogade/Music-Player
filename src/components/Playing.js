@@ -1,71 +1,31 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {Avatar, ListItem} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import TrackPlayer, {
-  STATE_PLAYING,
-  useTrackPlayerProgress,
-} from 'react-native-track-player';
-import moment from 'moment';
+import TrackPlayer, {STATE_PLAYING} from 'react-native-track-player';
 import {TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import Slider from "react-native-slider";
 
-const Playing = ({
-  title,
-  subtitle,
-  sliderValue,
-  playerInfo,
-  currentPlayerState,
-  sliderPercentage,
-}) => {
-  // const sliderPositionValue = parseInt((position / duration) * 100);
-  
-  const {position, bufferedPosition, duration} = useTrackPlayerProgress();
-  const [value, setValue] = useState(0);
-
-  console.log('Got as: - ', playerInfo);
-
+const Playing = ({playerInfo, currentPlayerState}) => {
   return (
     <>
-      <View style={styles.sliderWrapper}>
-        <Slider 
-          value={currentPlayerState.sliderPercentage}
-          onValueChange={(value) => {
-            console.log("Slider value change as: - ", value);
-          }}
-          step={1}
-        />
-
-        {/* <Slider
-          // value={currentPlayerState.sliderPercentage}
-          value={value}
-          style={{width: '100%', height: 0}}
-          thumbStyle={styles.sliderThumbStyle}
-          onValueChange={value => {
-            console.log("Seek value: - ", value);
-            setValue(value);
-            // TrackPlayer.seekTo(value);
-          }}
-          allowTouchTrack={true}
-          maximumValue={100}
-          minimumValue={0}
-          animateTransitions
-          step={1}
-        /> */}
-
-
+      <View style={styles.progressMainWrapper}>
+        <View
+          style={[
+            styles.progressMainStyle,
+            {
+              width: `${
+                playerInfo.sliderPercentage ? playerInfo.sliderPercentage : 0
+              }%`,
+            },
+          ]}></View>
       </View>
+
       <ListItem
         Component={View}
         containerStyle={{backgroundColor: '#dfe6e9'}}
         disabledStyle={{opacity: 0.5}}
-        pad={20}
-        // onLongPress={() => console.log('onLongPress()')}
-        // onPress={() => console.log('onPress()')}
-        // ViewComponent={View}
-        // topDivider
-      >
+        pad={20}>
         {currentPlayerState === STATE_PLAYING ? (
           <Avatar
             source={require('../assets/gifs/music.gif')}
@@ -77,7 +37,6 @@ const Playing = ({
           />
         ) : (
           <Avatar
-            // source={require('../assets/gifs/music.gif')}
             icon={{name: 'music-note', type: 'material-community', size: 45}}
             size="large"
             overlayContainerStyle={{backgroundColor: '#000'}}
@@ -156,7 +115,7 @@ const Playing = ({
 const mapStateToProps = state => ({
   playerInfo: state.playlistReducer.playerInfo,
   currentPlayerState: state.playlistReducer.currentPlayerState,
-  sliderPercentage: state.playlistReducer.sliderPercentage
+  sliderPercentage: state.playlistReducer.sliderPercentage,
 });
 
 export default connect(mapStateToProps)(Playing);
@@ -179,11 +138,26 @@ const styles = StyleSheet.create({
   },
   playerBtnWrapper: {
     flexDirection: 'row',
-    // borderWidth: 1,
-    // borderColor: colors.foreground,
     paddingVertical: 5,
   },
   btnStyle: {
     marginHorizontal: 8,
+  },
+  progressBar: {
+    width: 350,
+    height: 40,
+    marginTop: 25,
+  },
+  progressMainWrapper: {
+    backgroundColor: '#bdc3c7',
+    height: 4,
+    borderRadius: 16,
+    width: '100%',
+  },
+  progressMainStyle: {
+    borderRadius: 16,
+    height: 4,
+    backgroundColor: '#2c3e50',
+    // width: "28%"
   },
 });

@@ -34,7 +34,6 @@ const initialState = {
     sliderPercentage: (45 / 100) * 100,
     trackTitle: 'getTrack(getCurrentTrack()) use this function as it is',
   },
-  sliderPercentage: (45 / 100) * 100,
 };
 
 const addAudioFilesInformation = (state, action) => {
