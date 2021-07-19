@@ -33,6 +33,7 @@ const initialState = {
     position: 'mm:ss',
     sliderPercentage: (45 / 100) * 100,
     trackTitle: 'getTrack(getCurrentTrack()) use this function as it is',
+    trackId: "uuid v4 id"
   },
 };
 

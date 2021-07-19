@@ -9,8 +9,6 @@ import {PersistGate} from 'redux-persist/integration/react';
 import TrackPlayer from 'react-native-track-player';
 import {PermissionsAndroid} from 'react-native';
 
-console.log('Track Player Options has been updated.');
-
 const App = () => {
   const {store, persistor} = reduxStore();
 
@@ -63,6 +61,7 @@ const App = () => {
         TrackPlayer.CAPABILITY_STOP,
       ],
     });
+    console.log('Track Player Options has been updated.');
 
     return () => TrackPlayer.destroy();
   }, []);

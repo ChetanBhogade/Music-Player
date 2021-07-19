@@ -47,11 +47,7 @@ const HomeScreen = ({navigation, playlist}) => {
       </View>
 
       <View>
-        <Playing
-          title="Chetan Bhogade"
-          sliderValue={35}
-          subtitle="01:20 - 04:30"
-        />
+        <Playing />
       </View>
     </View>
   );

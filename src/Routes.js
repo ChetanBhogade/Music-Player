@@ -48,12 +48,14 @@ const Routes = ({setPlayerState, setPlayerInfo}) => {
   const grabCurrentTrackInfo = async () => {
     const trackIndex = await TrackPlayer.getCurrentTrack();
     const trackObject = await TrackPlayer.getTrack(trackIndex);
+    // console.log("Current Track Object: - ", trackObject);
 
     setPlayerInfo({
       duration: secondsToMS(duration),
       position: secondsToMS(position),
       sliderPercentage: parseInt((position / duration) * 100),
       trackTitle: trackObject ? trackObject.title : "No Media",
+      trackId: trackObject ? trackObject.id : null,
     });
   }
 

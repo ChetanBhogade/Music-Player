@@ -115,7 +115,6 @@ const Playing = ({playerInfo, currentPlayerState}) => {
 const mapStateToProps = state => ({
   playerInfo: state.playlistReducer.playerInfo,
   currentPlayerState: state.playlistReducer.currentPlayerState,
-  sliderPercentage: state.playlistReducer.sliderPercentage,
 });
 
 export default connect(mapStateToProps)(Playing);

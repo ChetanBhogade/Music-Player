@@ -34,16 +34,26 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
     console.log('Track has been created successfully...');
   };
 
-  const playClickedSong = async (trackIndex) => {
+  const playClickedSong = async trackIndex => {
+    if (isEdit) return;
+
     await createTrack();
-    console.log('Starting to play song...', await TrackPlayer.getCurrentTrack());
+    console.log(
+      'Starting to play song...',
+      await TrackPlayer.getCurrentTrack(),
+    );
     // await TrackPlayer.skip(`${index}`);
     await TrackPlayer.skip(trackIndex);
-    
   };
 
   const renderSongInfo = ({item}) => {
-    return <SongInfo name={item.title} playSong={playClickedSong} index={item.id} />;
+    return (
+      <SongInfo
+        name={item.title}
+        playSong={playClickedSong}
+        trackId={item.id}
+      />
+    );
   };
 
   const pickMultipleFiles = async () => {
@@ -112,11 +122,7 @@ const PlaylistScreen = ({route, playlist, addPlaylistSong}) => {
         </>
       ) : (
         <View>
-          <Playing
-            title="Chetan Bhogade"
-            sliderValue={35}
-            subtitle="01:20 - 04:30"
-          />
+          <Playing />
         </View>
       )}
       <LoadingSpinner loading={loading} />

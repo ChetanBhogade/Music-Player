@@ -1,25 +1,43 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {ListItem} from 'react-native-elements';
+import {Avatar, ListItem} from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import propTypes from 'prop-types';
+import {STATE_PLAYING} from 'react-native-track-player';
+import {connect} from 'react-redux';
 
-const SongInfo = ({name, playSong, index}) => {
+const SongInfo = ({
+  name,
+  playSong,
+  trackId,
+  playerInfo,
+  currentPlayerState,
+}) => {
   return (
     <ListItem
       bottomDivider
       onPress={() => {
         console.log('Song Clicked...');
-        playSong(index);
+        playSong(trackId);
       }}>
-      <MaterialCommunityIcons
-        // onPress={() => {
-        //   console.log("Song Music Icon Pressed...");
-        // }}
-        name="music-circle-outline" // "play-circle-outline"
-        size={40}
-        color="#FF6263"
-      />
+      {(() => {
+        if (
+          playerInfo.trackId === trackId &&
+          currentPlayerState === STATE_PLAYING
+        ) {
+          return (
+            <Avatar source={require('../assets/gifs/sound.gif')} size="small" />
+          );
+        } else {
+          return (
+            <MaterialCommunityIcons
+              name="music-circle-outline"
+              size={40}
+              color="#FF6263"
+            />
+          );
+        }
+      })()}
       <ListItem.Content>
         <ListItem.Title>{name}</ListItem.Title>
       </ListItem.Content>
@@ -29,8 +47,12 @@ const SongInfo = ({name, playSong, index}) => {
 
 SongInfo.propTypes = {
   name: propTypes.string.isRequired,
+  trackId: propTypes.string.isRequired,
 };
 
-export default SongInfo;
+const mapStateToProps = state => ({
+  playerInfo: state.playlistReducer.playerInfo,
+  currentPlayerState: state.playlistReducer.currentPlayerState,
+});
 
-const styles = StyleSheet.create({});
+export default connect(mapStateToProps)(SongInfo);
