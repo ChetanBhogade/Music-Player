@@ -9,23 +9,23 @@ import uuid from 'react-native-uuid';
 
 const initialState = {
   playlist: [
-    {
-      id: uuid.v4(),
-      name: 'Favorite Songs',
-      audioFilesInfo: [
-        {
-          id: uuid.v4(),
-          title: 'Kal Ho Na Ho',
-          url: '/emulator/0/download/kal-ho-na-ho.mp3',
-        },
-        {
-          id: uuid.v4(),
-          title: 'Kal Ho Na Ho 2',
-          url: '/emulator/0/download/kal-ho-na-ho-2.mp3',
-        },
-      ],
-      timestamp: new Date().getTime(),
-    },
+    // {
+    //   id: uuid.v4(),
+    //   name: 'Favorite Songs',
+    //   audioFilesInfo: [
+    //     {
+    //       id: uuid.v4(),
+    //       title: 'Kal Ho Na Ho',
+    //       url: '/emulator/0/download/kal-ho-na-ho.mp3',
+    //     },
+    //     {
+    //       id: uuid.v4(),
+    //       title: 'Kal Ho Na Ho 2',
+    //       url: '/emulator/0/download/kal-ho-na-ho-2.mp3',
+    //     },
+    //   ],
+    //   timestamp: new Date().getTime(),
+    // },
   ],
   currentPlayerState: null,
   playerInfo: {
@@ -33,7 +33,7 @@ const initialState = {
     position: 'mm:ss',
     sliderPercentage: (45 / 100) * 100,
     trackTitle: 'getTrack(getCurrentTrack()) use this function as it is',
-    trackId: "uuid v4 id"
+    trackId: 'uuid v4 id',
   },
 };
 

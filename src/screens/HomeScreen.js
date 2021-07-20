@@ -23,11 +23,18 @@ const HomeScreen = ({navigation, playlist}) => {
     <View style={styles.container}>
       <AppHeader />
       <View style={styles.mainContent}>
-        <FlatList
-          data={playlist}
-          renderItem={renderPlaylistFolders}
-          keyExtractor={item => item.id}
-        />
+        {playlist.length > 0 ? (
+          <FlatList
+            data={playlist}
+            renderItem={renderPlaylistFolders}
+            keyExtractor={item => item.id}
+          />
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={{fontSize: 20}}>Please Add Your First Playlist</Text>
+          </View>
+        )}
+
         <FAB
           placement="right"
           color="#1B98F5"
@@ -71,5 +78,10 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
