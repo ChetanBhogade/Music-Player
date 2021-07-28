@@ -15,6 +15,7 @@ const ChooseFolder = ({navigation, addPlaylist}) => {
   const [latestFolderPath, setLatestFolderPath] = useState('/storage');
   const [loading, setLoading] = useState(false);
   const [visibleToast, setVisibleToast] = useState(false);
+  const [hasPermissionError, setHasPermissionError] = useState(false);
 
   const handleSelectFolder = async () => {
     console.log('I like this folder.');
@@ -83,13 +84,23 @@ const ChooseFolder = ({navigation, addPlaylist}) => {
 
   const verifyPath = path => {
     if (path === '/storage/emulated') {
-      setLatestFolderPath('/storage/emulated/0');
+      if (hasPermissionError) {
+        navigation.goBack();
+        return false;
+      } else {
+        setLatestFolderPath('/storage/emulated/0');
+        return true;
+      }
     } else if (path === '/storage/self') {
       console.log('Path You are not allowed to access this folder');
       setVisibleToast(true);
       setLatestFolderPath('/storage');
+      return false;
     } else if (path === '/' || path === '') {
       navigation.goBack();
+      return false;
+    } else {
+      return true;
     }
   };
 
@@ -99,8 +110,14 @@ const ChooseFolder = ({navigation, addPlaylist}) => {
     folderStack.pop();
     const newPath = folderStack.join('/');
 
-    if (newPath === '/storage/emulated') {
+    if (newPath === '/storage/emulated' && !hasPermissionError) {
       setLatestFolderPath('/storage');
+    } else if (
+      hasPermissionError &&
+      (newPath === '/storage' || newPath === '/storage/emulated')
+    ) {
+      console.log("/storage folder doesn't have permission.");
+      setLatestFolderPath('/');
     } else {
       setLatestFolderPath(newPath);
     }
@@ -148,8 +165,8 @@ const ChooseFolder = ({navigation, addPlaylist}) => {
 
   const getSelectedFolderList = path => {
     console.log('Getting selected folder list....');
+    if (!verifyPath(path)) return;
     setLoading(true);
-    verifyPath(path);
     RNFS.readDir(path)
       .then(async result => {
         console.log('Got the result: - ', result);
@@ -181,6 +198,11 @@ const ChooseFolder = ({navigation, addPlaylist}) => {
       })
       .catch(error => {
         console.log('Got an error: - ', error.message, error.code);
+        setLatestFolderPath('/storage/emulated/0');
+        if (path !== '/storage/emulated') {
+          setHasPermissionError(true);
+          setVisibleToast(true);
+        }
         setLoading(false);
       });
   };
@@ -195,9 +217,9 @@ const ChooseFolder = ({navigation, addPlaylist}) => {
     );
   };
 
-  useEffect(() => {
-    renderRootFolder();
-  }, []);
+  // useEffect(() => {
+  //   renderRootFolder();
+  // }, []);
 
   return (
     <View style={styles.root}>
@@ -227,7 +249,7 @@ const ChooseFolder = ({navigation, addPlaylist}) => {
       <LoadingSpinner loading={loading} />
       <Toast
         visible={visibleToast}
-        message="Path You are not allowed to access this folder"
+        message="You are not allowed to access this folder"
       />
     </View>
   );
